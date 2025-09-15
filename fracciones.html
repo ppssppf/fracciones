@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Infografía: Fracciones, Área y Perímetro</title>
+  <style>
+    :root{--bg:#f6f8fb;--card:#ffffff;--accent:#2b6cb0;--muted:#6b7280;--glass: rgba(255,255,255,0.6)}
+    *{box-sizing:border-box}
+    body{font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; background:linear-gradient(180deg,#eef2ff 0%,var(--bg) 100%); color:#111}
+    .wrap{max-width:1100px;margin:28px auto;padding:20px}
+    header{display:flex;gap:16px;align-items:center;margin-bottom:18px}
+    .logo{width:72px;height:72px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#7dd3fc);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:20px;box-shadow:0 6px 20px rgba(43,108,176,0.15)}
+    h1{margin:0;font-size:22px}
+    p.lead{margin:4px 0 0;color:var(--muted)}
+
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
+    @media (max-width:920px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:620px){.grid{grid-template-columns:1fr}}
+
+    .card{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 6px 18px rgba(20,20,30,0.05);min-height:160px}
+    .card h2{margin:0 0 8px;font-size:18px;color:var(--accent)}
+    .muted{color:var(--muted);font-size:14px}
+
+    /* fraction visual */
+    .fraction{display:inline-block;text-align:center}
+    .fraction .num{font-weight:700;font-size:20px}
+    .fraction .bar{height:3px;background:#111;margin:2px 0}
+    .fraction .den{font-size:16px;color:var(--muted)}
+
+    .examples{margin-top:8px;display:flex;flex-direction:column;gap:10px}
+    .example{background:var(--glass);padding:10px;border-radius:10px}
+
+    /* calculators */
+    .calc-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .calc-row input[type=number]{width:120px;padding:8px;border-radius:8px;border:1px solid #e6e9ee}
+    .btn{background:var(--accent);color:white;padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
+    .result{margin-top:8px;background:#f8fafc;padding:10px;border-radius:8px;color:#0f172a}
+
+    footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
+
+    /* visual fraction bar */
+    .bar-visual{height:28px;border-radius:8px;background:#e6eefc;overflow:hidden;display:flex}
+    .bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),#60a5fa)}
+
+    .notes{font-size:13px;color:var(--muted);margin-top:10px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">M</div>
+      <div>
+        <h1>Fundamentos: Fracciones — Área — Perímetro</h1>
+        <p class="lead">Resumen visual con definiciones, fórmulas y pequeñas calculadoras interactivas.</p>
+      </div>
+    </header>
+
+    <main class="grid">
+      <!-- FRACTIONS -->
+      <section class="card" aria-labelledby="fracciones">
+        <h2 id="fracciones">Fracciones (concepto y tipos)</h2>
+        <p class="muted">Una fracción representa una parte de un todo: <strong>a⁄b</strong> (a = numerador, b = denominador, b ≠ 0).</p>
+
+        <div class="examples">
+          <div class="example">
+            <strong>Tipos:</strong>
+            <ul class="muted">
+              <li>Propia: numerador &lt; denominador (3/4).</li>
+              <li>Impropia: numerador ≥ denominador (7/4) → puede convertirse en número mixto (1 3/4).</li>
+              <li>Equivalentes: 1/2 = 2/4 = 3/6 (multiplicando/dividiendo por mismo número).</li>
+            </ul>
+          </div>
+
+          <div class="example">
+            <strong>Operaciones básicas:</strong>
+            <ul class="muted">
+              <li>Suma/resta (mismos denominadores): suma numeradores / mismo denominador. Ej: 2/7 + 3/7 = 5/7.</li>
+              <li>Suma/resta (distintos denominadores): llevar a común denominador.</li>
+              <li>Multiplicación: (a/b)×(c/d) = (a×c)/(b×d).</li>
+              <li>División: (a/b) ÷ (c/d) = (a/b)×(d/c) (multiplicar por la inversa).</li>
+            </ul>
+          </div>
+
+          <div class="example">
+            <strong>Visual:</strong>
+            <div style="display:flex;gap:12px;align-items:center;margin-top:8px">
+              <div style="min-width:120px">
+                <div class="fraction"><div class="num">3</div><div class="bar"></div><div class="den">4</div></div>
+                <div class="muted">3/4</div>
+              </div>
+              <div style="flex:1">
+                <div class="bar-visual" aria-hidden>
+                  <div class="bar-fill" style="width:75%"></div>
+                </div>
+                <div class="muted">75% del todo</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="example">
+            <strong>Calculadora rápida (fracción → decimal y simplificar):</strong>
+            <div style="margin-top:8px" class="calc-row">
+              <input id="f-num" type="number" placeholder="Numerador" min="-99999" />
+              <input id="f-den" type="number" placeholder="Denominador" min="1" />
+              <button class="btn" onclick="calcFrac()">Calcular</button>
+            </div>
+            <div id="f-res" class="result" aria-live="polite">Introduce numerador y denominador y pulsa "Calcular".</div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- AREA -->
+      <section class="card" aria-labelledby="area">
+        <h2 id="area">Área (qué es y fórmulas)</h2>
+        <p class="muted">Área = medida de la superficie. Se mide en unidades cuadradas (cm², m²).</p>
+
+        <div class="examples">
+          <div class="example">
+            <strong>Fórmulas esenciales:</strong>
+            <ul class="muted">
+              <li>Rectángulo/cuadrado: A = base × altura.</li>
+              <li>Triángulo: A = (base × altura) / 2.</li>
+              <li>Círculo: A = π × r² (π ≈ 3.1416).</li>
+              <li>Trapecio: A = ((B + b) × h) / 2 (B y b son bases).</li>
+            </ul>
+          </div>
+
+          <div class="example">
+            <strong>Calculadora de áreas:</strong>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+              <div>
+                <label class="muted">Rectángulo: base, altura</label><br>
+                <input id="rec-b" type="number" placeholder="base" />
+                <input id="rec-h" type="number" placeholder="altura" />
+                <button class="btn" onclick="areaRect()">Calcular</button>
+                <div id="rec-res" class="result"></div>
+              </div>
+
+              <div>
+                <label class="muted">Triángulo: base, altura</label><br>
+                <input id="tri-b" type="number" placeholder="base" />
+                <input id="tri-h" type="number" placeholder="altura" />
+                <button class="btn" onclick="areaTri()">Calcular</button>
+                <div id="tri-res" class="result"></div>
+              </div>
+
+              <div>
+                <label class="muted">Círculo: radio</label><br>
+                <input id="cir-r" type="number" placeholder="radio" />
+                <button class="btn" onclick="areaCir()">Calcular</button>
+                <div id="cir-res" class="result"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- PERIMETER -->
+      <section class="card" aria-labelledby="perimetro">
+        <h2 id="perimetro">Perímetro (qué es y fórmulas)</h2>
+        <p class="muted">Perímetro = suma de las longitudes de los lados. Se mide en unidades lineales (cm, m).</p>
+
+        <div class="examples">
+          <div class="example">
+            <strong>Fórmulas comunes:</strong>
+            <ul class="muted">
+              <li>Rectángulo: P = 2 × (base + altura).</li>
+              <li>Triángulo: P = lado₁ + lado₂ + lado₃.</li>
+              <li>Círculo (circunferencia): P = 2 × π × r (también llamada perímetro del círculo).</li>
+            </ul>
+          </div>
+
+          <div class="example">
+            <strong>Calculadora de perímetros:</strong>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+              <div>
+                <label class="muted">Rectángulo: base, altura</label><br>
+                <input id="pre-b" type="number" placeholder="base" />
+                <input id="pre-h" type="number" placeholder="altura" />
+                <button class="btn" onclick="perRect()">Calcular</button>
+                <div id="pre-res" class="result"></div>
+              </div>
+
+              <div>
+                <label class="muted">Triángulo: lado a, b, c</label><br>
+                <input id="t-a" type="number" placeholder="lado a" />
+                <input id="t-b" type="number" placeholder="lado b" />
+                <input id="t-c" type="number" placeholder="lado c" />
+                <button class="btn" onclick="perTri()">Calcular</button>
+                <div id="t-res" class="result"></div>
+              </div>
+
+              <div>
+                <label class="muted">Círculo: radio</label><br>
+                <input id="pc-r" type="number" placeholder="radio" />
+                <button class="btn" onclick="perCir()">Calcular</button>
+                <div id="pc-res" class="result"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <section style="margin-top:18px" class="card">
+      <h2>Consejos rápidos</h2>
+      <ul class="muted">
+        <li>Siempre simplifica fracciones dividiendo numerador y denominador por su MCD.</li>
+        <li>Verifica unidades: area → unidades²; perímetro → unidades.</li>
+        <li>Para figuras compuestas: suma áreas o perímetros de las partes que la componen (teniendo cuidado con las longitudes internas).</li>
+      </ul>
+      <div class="notes">Nota: las calculadoras usan π ≈ 3.1416 y no validan unidades (si mides en cm obtendrás cm² o cm según el caso).</div>
+    </section>
+
+    <footer>
+      Hecho con ❤️ — Puedes pedirme que añada ejercicios, cambie colores o exporte a PDF/Word.
+    </footer>
+  </div>
+
+  <script>
+    // utilidades matemáticas
+    function gcd(a,b){a=Math.abs(a);b=Math.abs(b);if(!b) return a;while(b){let t=a%b;a=b;b=t;}return a}
+
+    function calcFrac(){
+      const n = Number(document.getElementById('f-num').value)
+      const d = Number(document.getElementById('f-den').value)
+      const out = document.getElementById('f-res')
+      if(!d){out.textContent='El denominador debe ser distinto de 0.'; return}
+      const val = n / d
+      const m = gcd(n,d)
+      const sn = n / m
+      const sd = d / m
+      out.innerHTML = `Decimal: <strong>${val}</strong> — Fracción simplificada: <strong>${sn}/${sd}</strong>`
+    }
+
+    // Areas
+    function areaRect(){
+      const b = Number(document.getElementById('rec-b').value)
+      const h = Number(document.getElementById('rec-h').value)
+      const res = document.getElementById('rec-res')
+      if(!b||!h){res.textContent='Introduce base y altura mayores que 0.';return}
+      res.textContent = `Área = ${b} × ${h} = ${b*h} unidades²`}
+
+    function areaTri(){
+      const b = Number(document.getElementById('tri-b').value)
+      const h = Number(document.getElementById('tri-h').value)
+      const res = document.getElementById('tri-res')
+      if(!b||!h){res.textContent='Introduce base y altura mayores que 0.';return}
+      res.textContent = `Área = (${b} × ${h}) / 2 = ${ (b*h/2) } unidades²`}
+
+    function areaCir(){
+      const r = Number(document.getElementById('cir-r').value)
+      const res = document.getElementById('cir-res')
+      if(!r){res.textContent='Introduce un radio mayor que 0.';return}
+      const area = 3.1416 * r * r
+      res.textContent = `Área ≈ π × ${r}² = ${area.toFixed(4)} unidades²`}
+
+    // Perímetros
+    function perRect(){
+      const b = Number(document.getElementById('pre-b').value)
+      const h = Number(document.getElementById('pre-h').value)
+      const res = document.getElementById('pre-res')
+      if(!b||!h){res.textContent='Introduce base y altura mayores que 0.';return}
+      res.textContent = `Perímetro = 2 × (${b} + ${h}) = ${2*(b+h)} unidades`}
+
+    function perTri(){
+      const a = Number(document.getElementById('t-a').value)
+      const b = Number(document.getElementById('t-b').value)
+      const c = Number(document.getElementById('t-c').value)
+      const res = document.getElementById('t-res')
+      if(!a||!b||!c){res.textContent='Introduce los tres lados mayores que 0.';return}
+      res.textContent = `Perímetro = ${a} + ${b} + ${c} = ${a+b+c} unidades`}
+
+    function perCir(){
+      const r = Number(document.getElementById('pc-r').value)
+      const res = document.getElementById('pc-res')
+      if(!r){res.textContent='Introduce un radio mayor que 0.';return}
+      const p = 2 * 3.1416 * r
+      res.textContent = `Perímetro ≈ 2 × π × ${r} = ${p.toFixed(4)} unidades`}
+
+  </script>
+</body>
+</html>
